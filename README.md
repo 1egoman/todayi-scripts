@@ -8,7 +8,7 @@ computers can fix it.
 
 ## Install
 ```bash
-curl <path> | bash
+curl https://raw.githubusercontent.com/1egoman/todayi-scripts/master/install.sh | bash
 ```
 (look above to the `install.sh` script for transparency)
 
