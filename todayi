@@ -1,0 +1,45 @@
+#!/bin/bash
+# vim: set autoindent noexpandtab tabstop=2 shiftwidth=2 :
+# `todayi` is a shell script to track what I did today.
+# By Ryan Gaus
+TODAYI_ROOT="$HOME/todayi"
+
+# `git init` the todayi if it doesn't exist yet.
+if [[ ! -d "$TODAYI_ROOT/.git" ]]; then
+	cd "$TODAYI_ROOT"
+	git init
+	echo "Initialized git repo in $TODAYI_ROOT"
+fi
+
+# Where is the path to today's file going to be?
+today_path_name="$TODAYI_ROOT/$(date +%Y/%m)"
+today_file_name="$(date +%d).md"
+today="$today_path_name/$today_file_name"
+mkdir -p "$today_path_name"
+
+if [[ ! "$@" ]]; then
+	# If an action wasn't passed, open log in an editor
+	if [[ "$EDITOR" ]]; then
+		$EDITOR "$today"
+	else
+		vi "$today"
+	fi
+
+	# don't commit after an editor has been opened
+	exit 0
+elif [[ -f "$today" ]]; then
+	# Today already exists
+	# add another line to the end of the file for the next item
+	echo "- $@" >> "$today"
+else
+	# Today doesn't exist yet!
+	cat <<-EOF > "$today"
+	# $(date +%D)
+	- $@
+	EOF
+fi
+
+# commit the change
+cd "$TODAYI_ROOT"
+git add "$today"
+git commit -m "log: $@"
