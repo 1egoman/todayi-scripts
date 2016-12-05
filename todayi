@@ -17,7 +17,9 @@ today_file_name="$(date +%d).md"
 today="$today_path_name/$today_file_name"
 mkdir -p "$today_path_name"
 
-if [[ ! "$@" ]]; then
+message="$@"
+
+if [[ ! "$message" ]]; then
 	# If an action wasn't passed, open log in an editor
 	if [[ "$EDITOR" ]]; then
 		$EDITOR "$today"
@@ -42,4 +44,4 @@ fi
 # commit the change
 cd "$TODAYI_ROOT"
 git add "$today"
-git commit -m "log: $@"
+git commit -m "log: $message"
